@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'title',
         'description',
@@ -13,4 +16,13 @@ class Task extends Model
         'priority',
         'due_date',
     ];
+
+    protected $casts = [
+        'due_date' => 'date',
+    ];
+
+    public function scopeByStatus($query, string $status)
+    {
+        return $query->where('status', $status);
+    }
 }
