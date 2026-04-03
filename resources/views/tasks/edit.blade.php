@@ -17,7 +17,9 @@
         <option value="high" {{ $task->priority == 'high' ? 'selected' : '' }}>High</option>
     </select>
 
-    <input type="date" name="due_date" value="{{ $task->due_date }}">
+    {{-- AVANT : <input type="date" name="due_date" value="{{ $task->due_date }}"> --}}
+    {{-- APRÈS : Carbon::parse gère le cas où due_date est null --}}
+    <input type="date" name="due_date" value="{{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('Y-m-d') : '' }}">
 
     <button type="submit">Mettre à jour</button>
 </form>
