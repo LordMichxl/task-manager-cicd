@@ -7,26 +7,17 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $tasks = Task::all();
+        $tasks = auth()->user()->tasks;
         return view('tasks.index', compact('tasks'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('tasks.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -37,41 +28,50 @@ class TaskController extends Controller
             'due_date' => 'nullable|date'
         ]);
 
-        Task::create($request->all());
+        auth()->user()->tasks()->create($request->all());
 
         return redirect()->route('tasks.index')
-                        ->with('success','Task created successfully.'); 
+                        ->with('success','Task créée avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Task $task)
     {
-        //
+        $this->authorize('view', $task);
+        return view('tasks.show', compact('task'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Task $task)
     {
-        //
+        $this->authorize('update', $task);
+        return view('tasks.edit', compact('task'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Task $task)
     {
-        //
+        $this->authorize('update', $task);
+
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'status' => 'in:todo,in_progress,done',
+            'priority' => 'in:low,medium,high',
+            'due_date' => 'nullable|date'
+        ]);
+
+        $task->update($request->all());
+
+        return redirect()->route('tasks.index')
+                        ->with('success','Task mise à jour.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // ✅ SUPPRESSION
     public function destroy(Task $task)
     {
-        //
+        $this->authorize('delete', $task);
+
+        $task->delete();
+
+        return redirect()->route('tasks.index')
+                        ->with('success', 'Tâche supprimée avec succès.');
     }
 }
