@@ -7,9 +7,16 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = auth()->user()->tasks;
+        $query = auth()->user()->tasks(); 
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $tasks = $query->latest()->paginate(10);
+
         return view('tasks.index', compact('tasks'));
     }
 
@@ -20,29 +27,31 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'status' => 'in:todo,in_progress,done',
-            'priority' => 'in:low,medium,high',
-            'due_date' => 'nullable|date'
+        $validated = $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'status'      => 'required|in:todo,in_progress,done',
+            'priority'    => 'required|in:low,medium,high',
+            'due_date'    => 'nullable|date',
         ]);
 
-        auth()->user()->tasks()->create($request->all());
+        auth()->user()->tasks()->create($validated);
 
         return redirect()->route('tasks.index')
-                        ->with('success','Task créée avec succès.');
+            ->with('success', 'Tâche créée avec succès.');
     }
 
     public function show(Task $task)
     {
         $this->authorize('view', $task);
+
         return view('tasks.show', compact('task'));
     }
 
     public function edit(Task $task)
     {
         $this->authorize('update', $task);
+
         return view('tasks.edit', compact('task'));
     }
 
@@ -50,21 +59,20 @@ class TaskController extends Controller
     {
         $this->authorize('update', $task);
 
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'status' => 'in:todo,in_progress,done',
-            'priority' => 'in:low,medium,high',
-            'due_date' => 'nullable|date'
+        $validated = $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'status'      => 'required|in:todo,in_progress,done',
+            'priority'    => 'required|in:low,medium,high',
+            'due_date'    => 'nullable|date',
         ]);
 
-        $task->update($request->all());
+        $task->update($validated);
 
-        return redirect()->route('tasks.index')
-                        ->with('success','Task mise à jour.');
+        return redirect()->route('tasks.show', $task)
+            ->with('success', 'Tâche mise à jour.');
     }
 
-    // ✅ SUPPRESSION
     public function destroy(Task $task)
     {
         $this->authorize('delete', $task);
@@ -72,6 +80,6 @@ class TaskController extends Controller
         $task->delete();
 
         return redirect()->route('tasks.index')
-                        ->with('success', 'Tâche supprimée avec succès.');
+            ->with('success', 'Tâche supprimée avec succès.');
     }
 }

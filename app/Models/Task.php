@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Task extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes; // ✅ garder SoftDeletes
 
     protected $fillable = [
         'title',
@@ -19,8 +19,15 @@ class Task extends Model
         'user_id'
     ];
 
+    // ✅ Relation avec l'utilisateur
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    // ✅ Scope pour filtrer par statut
+    public function scopeByStatus($query, string $status)
+    {
+        return $query->where('status', $status);
     }
 }
