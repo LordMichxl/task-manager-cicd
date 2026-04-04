@@ -1,5 +1,7 @@
 <?php
 
+it('returns a successful response', function () {
+    $response = $this->get('/');
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;

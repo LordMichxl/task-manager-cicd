@@ -9,10 +9,10 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Task::query();
+        $query = auth()->user()->tasks(); 
 
         if ($request->filled('status')) {
-            $query->byStatus($request->status);
+            $query->where('status', $request->status);
         }
 
         $tasks = $query->latest()->paginate(10);
@@ -22,7 +22,6 @@ class TaskController extends Controller
 
     public function create()
     {
-        return view('tasks.create');
         return view('tasks.create');
     }
 
@@ -36,7 +35,7 @@ class TaskController extends Controller
             'due_date'    => 'nullable|date',
         ]);
 
-        Task::create($validated);
+        auth()->user()->tasks()->create($validated);
 
         return redirect()->route('tasks.index')
             ->with('success', 'Tâche créée avec succès.');
@@ -44,16 +43,22 @@ class TaskController extends Controller
 
     public function show(Task $task)
     {
+        $this->authorize('view', $task);
+
         return view('tasks.show', compact('task'));
     }
 
     public function edit(Task $task)
     {
+        $this->authorize('update', $task);
+
         return view('tasks.edit', compact('task'));
     }
 
     public function update(Request $request, Task $task)
     {
+        $this->authorize('update', $task);
+
         $validated = $request->validate([
             'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -70,9 +75,11 @@ class TaskController extends Controller
 
     public function destroy(Task $task)
     {
+        $this->authorize('delete', $task);
+
         $task->delete();
 
         return redirect()->route('tasks.index')
-            ->with('success', 'Tâche supprimée.');
+            ->with('success', 'Tâche supprimée avec succès.');
     }
 }
