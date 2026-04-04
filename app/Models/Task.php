@@ -17,10 +17,6 @@ class Task extends Model
         'due_date',
     ];
 
-    protected $casts = [
-        'due_date' => 'date',
-    ];
-
     public function scopeByStatus($query, string $status)
     {
         return $query->where('status', $status);

@@ -87,7 +87,7 @@ class TaskTest extends TestCase
         $response = $this->get(route('tasks.index', ['status' => 'todo']));
 
         $response->assertStatus(200);
-        $response->assertSee('todo');
+        $response->assertSee('À faire');
     }
 
     //Validation création titre obligatoire
