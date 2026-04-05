@@ -1,44 +1,71 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Liste des tâches</title>
-</head>
-<body>
+@extends('layouts.app')
 
-<h1>Liste des tâches</h1>
+@section('title', 'Liste des tâches')
 
-@if(session('success'))
-    <p style="color:green">{{ session('success') }}</p>
+@section('content')
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3">Liste des tâches</h1>
+    <a href="{{ route('tasks.create') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Nouvelle tâche
+    </a>
+</div>
+
+@if ($tasks->isEmpty())
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> Aucune tâche disponible pour l’instant.
+    </div>
+@else
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-hover align-middle mb-0 bg-white">
+            <thead class="table-dark text-white">
+                <tr>
+                    <th>Titre</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Priorité</th>
+                    <th>Échéance</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($tasks as $task)
+                <tr>
+                    <td>{{ $task->title }}</td>
+                    <td class="text-truncate" style="max-width:280px;">{{ \Illuminate\Support\Str::limit($task->description, 70) }}</td>
+                    <td>
+                        @php
+                        $statusClass = match ($task->status) {
+                            'done' => 'success',
+                            'in_progress' => 'warning',
+                            default => 'secondary',
+                        };
+                        $statusLabel = match ($task->status) {
+                            'done' => 'Terminé',
+                            'in_progress' => 'En cours',
+                            default => 'À faire',
+                        };
+                        @endphp
+                        <span class="badge bg-{{ $statusClass }}">{{ $statusLabel }}</span>
+                    </td>
+                    <td>
+                        @php
+                        $priorityClass = match ($task->priority) {
+                            'high' => 'danger',
+                            'medium' => 'warning text-dark',
+                            default => 'info text-dark',
+                        };
+                        $priorityLabel = match ($task->priority) {
+                            'high' => 'Haute',
+                            'medium' => 'Moyenne',
+                            default => 'Basse',
+                        };
+                        @endphp
+                        <span class="badge {{ $priorityClass }}">{{ $priorityLabel }}</span>
+                    </td>
+                    <td>{{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') : '—' }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 @endif
-
-<a href="{{ route('tasks.create') }}">Créer une tâche</a>
-
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Titre</th>
-        <th>Description</th>
-        <th>Action</th>
-    </tr>
-
-    @foreach($tasks as $task)
-    <tr>
-        <td>{{ $task->id }}</td>
-        <td>{{ $task->title }}</td>
-        <td>{{ $task->description }}</td>
-        <td>
-
-            <!-- Supprimer -->
-            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <button type="submit">Supprimer</button>
-            </form>
-
-        </td>
-    </tr>
-    @endforeach
-</table>
-
-</body>
-</html>
+@endsection
