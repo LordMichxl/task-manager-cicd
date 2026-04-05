@@ -2,13 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Task;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<Task>
- */
 class TaskFactory extends Factory
 {
     public function definition(): array
@@ -19,7 +14,6 @@ class TaskFactory extends Factory
             'status'      => $this->faker->randomElement(['todo', 'in_progress', 'done']),
             'priority'    => $this->faker->randomElement(['low', 'medium', 'high']),
             'due_date'    => $this->faker->optional()->dateTimeBetween('now', '+1 year'),
-            'user_id'     => User::factory(), // ✅ important
         ];
     }
 }
