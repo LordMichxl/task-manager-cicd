@@ -29,7 +29,7 @@
         <td>
 
             <!-- Supprimer -->
-            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST">
+            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cette tâche ?')">
                 @csrf
                 @method('DELETE')
                 <button type="submit">Supprimer</button>
