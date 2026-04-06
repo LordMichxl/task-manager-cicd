@@ -1,25 +1,32 @@
-<form method="POST" action="{{ route('tasks.update', $task) }}">
-    @csrf
-    @method('PUT')
+@extends('layouts.app')
 
-    <input type="text" name="title" value="{{ $task->title }}" required>
-    <textarea name="description">{{ $task->description }}</textarea>
+@section('title', 'Modification de la tâche')
 
-    <select name="status">
-        <option value="todo" {{ $task->status == 'todo' ? 'selected' : '' }}>Todo</option>
-        <option value="in_progress" {{ $task->status == 'in_progress' ? 'selected' : '' }}>In Progress</option>
-        <option value="done" {{ $task->status == 'done' ? 'selected' : '' }}>Done</option>
-    </select>
+@section('content')
+    <form method="POST" action="{{ route('tasks.update', $task) }}">
+        @csrf
+        @method('PUT')
 
-    <select name="priority">
-        <option value="low" {{ $task->priority == 'low' ? 'selected' : '' }}>Low</option>
-        <option value="medium" {{ $task->priority == 'medium' ? 'selected' : '' }}>Medium</option>
-        <option value="high" {{ $task->priority == 'high' ? 'selected' : '' }}>High</option>
-    </select>
+        <input type="text" name="title" value="{{ $task->title }}" required>
+        <textarea name="description">{{ $task->description }}</textarea>
 
-    {{-- AVANT : <input type="date" name="due_date" value="{{ $task->due_date }}"> --}}
-    {{-- APRÈS : Carbon::parse gère le cas où due_date est null --}}
-    <input type="date" name="due_date" value="{{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('Y-m-d') : '' }}">
+        <select name="status">
+            <option value="todo" {{ $task->status == 'todo' ? 'selected' : '' }}>Todo</option>
+            <option value="in_progress" {{ $task->status == 'in_progress' ? 'selected' : '' }}>In Progress</option>
+            <option value="done" {{ $task->status == 'done' ? 'selected' : '' }}>Done</option>
+        </select>
 
-    <button type="submit">Mettre à jour</button>
-</form>
+        <select name="priority">
+            <option value="low" {{ $task->priority == 'low' ? 'selected' : '' }}>Low</option>
+            <option value="medium" {{ $task->priority == 'medium' ? 'selected' : '' }}>Medium</option>
+            <option value="high" {{ $task->priority == 'high' ? 'selected' : '' }}>High</option>
+        </select>
+
+        <input type="date" name="due_date" value="{{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('Y-m-d') : '' }}">
+
+        <button type="submit" class="btn btn-primary btn-sm"> Mettre à jour </button>
+        <a href="{{ route('tasks.index') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-1"></i> Retour à la liste
+        </a>
+    </form>
+@endsection
