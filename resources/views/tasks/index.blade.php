@@ -24,6 +24,7 @@
                     <th>Status</th>
                     <th>Priorité</th>
                     <th>Échéance</th>
+                    <th> Actions </th>
                 </tr>
             </thead>
             <tbody>
@@ -62,6 +63,15 @@
                         <span class="badge {{ $priorityClass }}">{{ $priorityLabel }}</span>
                     </td>
                     <td>{{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') : '—' }}</td>
+                    <td> <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-info btn-sm">Modifier</a> 
+                    <a href="{{ route('tasks.show', $task->id) }}" class="btn btn-secondary btn-sm">Voir</a> 
+
+                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Confirmer la suppression de cette tâche ?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                    </form>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>
