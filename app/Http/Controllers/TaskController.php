@@ -12,7 +12,7 @@ class TaskController extends Controller
         $query = Task::query();
 
         if ($request->filled('status')) {
-            $query->byStatus($request->status);
+            $query->byStatus($request->input('status'));
         }
 
         $tasks = $query->latest()->paginate(10);
