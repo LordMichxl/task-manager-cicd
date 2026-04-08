@@ -20,7 +20,7 @@ class TaskUpdateTest extends TestCase
             'priority' => 'high',
         ]);
 
-       $response->assertRedirect(route('tasks.show', $task));
+        $response->assertRedirect(route('tasks.show', $task));
         $this->assertDatabaseHas('tasks', ['title' => 'Titre modifié']);
     }
 
