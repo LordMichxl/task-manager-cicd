@@ -9,14 +9,7 @@ class Task extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'description',
-        'status',
-        'priority',
-        'due_date',
-    ];
-
+   protected $fillable = ['title', 'description', 'status'];
     public function scopeByStatus($query, string $status)
     {
         return $query->where('status', $status);
