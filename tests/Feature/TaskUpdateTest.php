@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use App\Models\Task;
@@ -20,7 +22,7 @@ class TaskUpdateTest extends TestCase
             'priority' => 'high',
         ]);
 
-       $response->assertRedirect(route('tasks.show', $task));
+        $response->assertRedirect(route('tasks.show', $task));
         $this->assertDatabaseHas('tasks', ['title' => 'Titre modifié']);
     }
 

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-test('user can delete their own task', function () {
+test('user can delete their own task', function (): void {
     $user = User::factory()->create();
     $task = Task::factory()->create(['user_id' => $user->id]);
 
@@ -19,7 +21,7 @@ test('user can delete their own task', function () {
     $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
 });
 
-test('user cannot delete another users task', function () {
+test('user cannot delete another users task', function (): void {
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
     $task = Task::factory()->create(['user_id' => $otherUser->id]);
@@ -32,7 +34,7 @@ test('user cannot delete another users task', function () {
     $this->assertDatabaseHas('tasks', ['id' => $task->id]);
 });
 
-test('guest cannot delete task', function () {
+test('guest cannot delete task', function (): void {
     $task = Task::factory()->create();
 
     $response = $this->delete(route('tasks.destroy', $task));
