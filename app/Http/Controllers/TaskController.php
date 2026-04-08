@@ -15,6 +15,10 @@ class TaskController extends Controller
             $query->byStatus($request->status);
         }
 
+        if ($request->filled('priority')) {
+            $query->where('priority', $request->priority);
+        }
+
         $tasks = $query->latest()->paginate(10);
 
         return view('tasks.index', compact('tasks'));
