@@ -10,3 +10,12 @@
 ### Routes
 - GET /tasks/{task}/edit
 - PUT /tasks/{task}
+
+
+### Fixed
+- Correction du formulaire edit task
+
+### DevOps
+- Ajout pipeline CI/CD
+- Ajout Dockerfile
+- Ajout GHCR

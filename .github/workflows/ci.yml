@@ -1,12 +1,15 @@
 name: Laravel CI
+
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
 jobs:
   tests:
     runs-on: ubuntu-latest
+
     services:
       mysql:
         image: mysql:8.0
@@ -15,27 +18,46 @@ jobs:
           MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
-          tools: php-cs-fixer, phpstan
-      - name: Install PHP dependencies
+
+      - name: Install dependencies
         run: composer install
-      - name: Install Node dependencies
-        run: npm install
+
       - name: Copy .env
         run: cp .env.example .env
+
       - name: Generate key
         run: php artisan key:generate
+
       - name: Run migrations
         run: php artisan migrate
-      - name: Run CS Fixer
-        run: vendor/bin/php-cs-fixer fix --dry-run --diff
-      - name: Run PHPStan
-        run: vendor/bin/phpstan analyse
+
       - name: Run tests
         run: php artisan test
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse
+
+      - name: Run CS Fixer
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm ci
+    - run: npm run build
+    - uses: actions/upload-artifact@v3
+      with:
+        name: frontend-build
+        path: public/build
