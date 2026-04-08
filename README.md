@@ -5,7 +5,7 @@
 ![Laravel](https://img.shields.io/badge/Laravel-12.x-red)
 ![Docker](https://img.shields.io/badge/Docker-ready-blue)
 
-Application web de gestion de tâches développée avec Laravel 13, intégrant une pipeline CI/CD complète via GitHub Actions et une infrastructure Docker.
+Application web de gestion de tâches développée avec Laravel 12, intégrant une pipeline CI/CD complète via GitHub Actions et une infrastructure Docker.
 
 ## Fonctionnalités
 
