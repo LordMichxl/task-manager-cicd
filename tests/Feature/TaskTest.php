@@ -14,11 +14,11 @@ class TaskTest extends TestCase
     public function test_can_create_task(): void
     {
         $response = $this->post(route('tasks.store'), [
-            'title'       => 'Ma première tâche',
+            'title' => 'Ma première tâche',
             'description' => 'Description de ma tâche',
-            'status'      => 'todo',
-            'priority'    => 'high',
-            'due_date'    => '2025-12-31',
+            'status' => 'todo',
+            'priority' => 'high',
+            'due_date' => '2025-12-31',
         ]);
 
         $response->assertRedirect(route('tasks.index'));
@@ -54,15 +54,15 @@ class TaskTest extends TestCase
         $task = Task::factory()->create(['status' => 'todo']);
 
         $response = $this->put(route('tasks.update', $task), [
-            'title'    => 'Titre modifié',
-            'status'   => 'in_progress',
+            'title' => 'Titre modifié',
+            'status' => 'in_progress',
             'priority' => 'medium',
         ]);
 
         $response->assertRedirect(route('tasks.show', $task));
         $this->assertDatabaseHas('tasks', [
-            'id'     => $task->id,
-            'title'  => 'Titre modifié',
+            'id' => $task->id,
+            'title' => 'Titre modifié',
             'status' => 'in_progress',
         ]);
     }
@@ -94,8 +94,8 @@ class TaskTest extends TestCase
     public function test_task_creation_requires_title(): void
     {
         $response = $this->post(route('tasks.store'), [
-            'title'    => '',
-            'status'   => 'todo',
+            'title' => '',
+            'status' => 'todo',
             'priority' => 'medium',
         ]);
 

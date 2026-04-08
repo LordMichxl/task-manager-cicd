@@ -15,8 +15,8 @@ class TaskUpdateTest extends TestCase
         $task = Task::factory()->create();
 
         $response = $this->put(route('tasks.update', $task), [
-            'title'    => 'Titre modifié',
-            'status'   => 'in_progress',
+            'title' => 'Titre modifié',
+            'status' => 'in_progress',
             'priority' => 'high',
         ]);
 
@@ -29,7 +29,7 @@ class TaskUpdateTest extends TestCase
         $task = Task::factory()->create();
 
         $response = $this->put(route('tasks.update', $task), [
-            'title'  => '',
+            'title' => '',
             'status' => 'done',
         ]);
 

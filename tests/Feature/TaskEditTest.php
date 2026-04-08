@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class TaskEditTest extends TestCase
 {
@@ -18,11 +18,11 @@ class TaskEditTest extends TestCase
         $response = $this->put("/tasks/{$task->id}", [
             'title' => 'Titre Modifie',
             'status' => 'in_progress', // Aligné sur ta migration
-            'priority' => 'high'
+            'priority' => 'high',
         ]);
 
         // Ton contrôleur fait un return redirect(), donc on teste la redirection
-        $response->assertRedirect(); 
+        $response->assertRedirect();
         $this->assertDatabaseHas('tasks', ['title' => 'Titre Modifie']);
     }
 
@@ -32,9 +32,9 @@ class TaskEditTest extends TestCase
         $task = Task::factory()->create();
 
         $response = $this->put("/tasks/{$task->id}", [
-            'title' => '', 
+            'title' => '',
             'status' => 'done',
-            'priority' => 'medium'
+            'priority' => 'medium',
         ]);
 
         $response->assertSessionHasErrors('title');
@@ -48,7 +48,7 @@ class TaskEditTest extends TestCase
         $response = $this->put("/tasks/{$task->id}", [
             'title' => str_repeat('a', 256),
             'status' => 'todo',
-            'priority' => 'low'
+            'priority' => 'low',
         ]);
 
         $response->assertSessionHasErrors('title');
@@ -60,7 +60,7 @@ class TaskEditTest extends TestCase
         $response = $this->put("/tasks/999", [
             'title' => 'Inexistant',
             'status' => 'todo',
-            'priority' => 'low'
+            'priority' => 'low',
         ]);
 
         $response->assertStatus(404);
@@ -74,7 +74,7 @@ class TaskEditTest extends TestCase
         $response = $this->put("/tasks/{$task->id}", [
             'title' => 'Titre OK',
             'status' => 'invalid-status', // Ne passera pas la validation 'in:todo,in_progress,done'
-            'priority' => 'low'
+            'priority' => 'low',
         ]);
 
         $response->assertSessionHasErrors('status');
