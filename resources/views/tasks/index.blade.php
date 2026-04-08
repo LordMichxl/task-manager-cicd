@@ -66,10 +66,12 @@
                     <td> <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-info btn-sm">Modifier</a> 
                     <a href="{{ route('tasks.show', $task->id) }}" class="btn btn-secondary btn-sm">Voir</a> 
 
-                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Confirmer la suppression de cette tâche ?');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('⚠️ Voulez-vous vraiment supprimer cette tâche ? Cette action est irréversible.');">
+                      @csrf
+                      @method('DELETE')       
+                      <button type="submit" class="btn btn-danger btn-sm">
+                          <i class="fas fa-trash"></i> Supprimer
+                      </button>
                     </form>
                     </td>
                 </tr>
