@@ -2,10 +2,10 @@
 
 ![CI](https://github.com/LordMichxl/task-manager-cicd/actions/workflows/ci.yml/badge.svg)
 ![PHP](https://img.shields.io/badge/PHP-8.2-blue)
-![Laravel](https://img.shields.io/badge/Laravel-11.x-red)
+![Laravel](https://img.shields.io/badge/Laravel-13.x-red)
 ![Docker](https://img.shields.io/badge/Docker-ready-blue)
 
-Application web de gestion de tâches développée avec Laravel 11, intégrant une pipeline CI/CD complète via GitHub Actions et une infrastructure Docker.
+Application web de gestion de tâches développée avec Laravel 13, intégrant une pipeline CI/CD complète via GitHub Actions et une infrastructure Docker.
 
 ## Fonctionnalités
 
@@ -46,6 +46,7 @@ L'application est accessible sur http://localhost.
 
 ## Commandes utiles
 '''bash
+php artisan serve
 # Lancer les tests
 php artisan test
 
